@@ -1,0 +1,84 @@
+{% load staticfiles %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://v3.bootcss.com/examples/carousel/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>恐怖新闻分类网站</title>
+    {% include 'head.html' %}
+    <script src="{% static "js/jquery.min.js" %}" ></script>
+    </script>
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+    {% include 'nav.html' %}
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" style="height: 200px">
+      <div class="carousel-inner" role="listbox">
+        <div class="item active" style="height: 200px">
+          <img src="{% static "img/bg.jpg" %}" alt="First slide">    
+        </div>
+      </div>
+    </div><!-- /.carousel -->
+
+
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+    
+    <div class="container marketing" style="padding-top: 10px; margin-top: -60px auto;" >
+      <div style="width: 300px; margin: 0px auto;">
+         <form class="form-signin" role="form" action="/addTag" method="POST">
+          <table>
+            <tr>
+              <td><input type="text" name="tag" class="form-control" placeholder="tag" style="height: 40px"></td>
+              <td> <button type="submit" class="btn btn-default">添加标签</button></td>
+            </tr>
+          </table>
+           <div class="input-group">
+             
+            
+          </div>
+         </form>
+      </div>
+
+      <div>
+      <table class="table table-striped">
+        <caption>标签列表</caption>
+        <thead>
+        <tr>
+           <th>标签名字</th>
+           <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in tagList %}
+        <tr>
+          <td>{{item.tag}}</td>
+          <td>
+            <a href="/delTag?id={{item.id}}">删除</a>
+          </td>
+        </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+      <!-- /END THE FEATURETTES -->
+
+
+      <!-- FOOTER -->
+      {% include 'foot.html' %}
+
+
+</body>
+</html>

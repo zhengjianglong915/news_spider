@@ -1,0 +1,84 @@
+{% load staticfiles %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://v3.bootcss.com/examples/carousel/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>恐怖新闻分类网站</title>
+    {% include 'head.html' %}
+    <script src="{% static "js/jquery.min.js" %}" ></script>
+    </script>
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+    {% include 'nav.html' %}
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" style="height: 200px">
+      <div class="carousel-inner" role="listbox">
+        <div class="item active" style="height: 200px">
+          <img src="{% static "img/bg.jpg" %}" alt="First slide">    
+        </div>
+      </div>
+    </div><!-- /.carousel -->
+
+
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+    
+    <div class="container marketing" style="padding-top: 10px; margin-top: -60px auto;" >
+      <div style="width: 300px; margin: 0px auto;height: 400px">
+      {% if message != None %}
+        <div class="alert alert-success" role="alert">{{message}}</div>
+      {% endif %}
+
+         <form class="form-signin" role="form" action="/system_setting" method="POST">
+          <table>
+            <tr>
+              <td>数据库切换:&nbsp;&nbsp;</td>
+              <td><label>
+            {% ifequal databases 'es' %}
+                  <input type="radio" name="databases" id="databases" 
+                 value="es" checked> 
+                 开启检索功能&nbsp;&nbsp;
+                 <input type="radio" name="databases" id="databases" 
+                 value="mongodb" > 关闭检索功能
+             {% else %}
+                <input type="radio" name="databases" id="databases" 
+                 value="es"> 
+                 开启检索功能&nbsp;&nbsp;
+                 <input type="radio" name="databases" id="databases" 
+                 value="mongodb" checked> 关闭检索功能
+              {% endifequal %}
+            
+            </label>
+            </td>
+            </tr>
+          </table>
+          <br>
+          <br>
+
+          <button type="submit" class="btn btn-success">保存</button>
+          <div class="input-group">
+          </div>
+         </form>
+      </div>
+    </div>
+
+      <!-- /END THE FEATURETTES -->
+
+
+      <!-- FOOTER -->
+      {% include 'foot.html' %}
+
+
+</body>
+</html>

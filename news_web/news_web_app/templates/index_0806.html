@@ -1,0 +1,356 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://v3.bootcss.com/examples/carousel/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>恐怖新闻分类网站</title>
+    {% include 'head.html' %}
+    
+
+    <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+    <link rel="stylesheet" type="text/css" media="all" href="{% static "time/daterangepicker-bs3.css" %}" />
+    <script src="{% static "js/jquery.min.js" %}" ></script>
+    </script>
+    <script type="text/javascript" src="{% static "time/moment.js" %}">
+    </script>
+    <script type="text/javascript" src="{% static "time/daterangepicker.js" %}">
+    </script>
+    <style type="text/css"> 
+       .reveal-modal-bg{
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        background: #000;
+        background: rgba(0,0,0,.8);
+        z-index: 100;
+        display: none;
+        top: 0;
+        left: 0;
+      }
+      .window{ 
+          width:370px; 
+          height:245px; 
+          position:absolute; 
+          padding:2px; 
+          margin:5px; 
+       } 
+       .approvalDiv{
+          width:160px; 
+          height:60px; 
+          position:fixed;
+       }
+       a:hover{
+        cursor: pointer;
+       }  
+       em{
+          font-style:italic;
+          color:RED;
+          font-weight:bold;
+       }
+
+    </style> 
+    <script type="text/javascript"> 
+        function move(step){
+            var txtFocus = document.getElementById("search_key");
+           if (document.selection) {
+                var range = txtFocus.createTextRange();
+                range.move("character", step);
+                range.select();
+            } else {
+                //obj.setSelectionRange(startPosition, endPosition);
+                var iCaretPos = txtFocus.selectionStart;
+                var position = iCaretPos + step;
+                txtFocus.setSelectionRange(position, position);
+                txtFocus.focus();
+            }
+        }
+
+       $(document).keydown(function(e){
+
+          if (e.keyCode === 37) {
+              move(-1);
+          }
+          if (e.keyCode === 39) {
+              move(1);
+          }
+      });
+      </script> 
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+    {% include 'nav.html' %}
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" style="height: 350px">
+      <div class="carousel-inner">
+        <div style="height: 350px">
+          <img src="{% static "img/bg.jpg" %}" alt="First slide">
+          <div class="container" style="height: 200px">
+            <div class="carousel-caption" style="height: 200px">
+              <h1>新闻抓取与分类</h1>
+              <div class="input-group">
+                <!-- <div class="input-group-btn" style="height: 45px">
+                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="height: 45px">所有网站 <span class="caret"></span></button>
+                      <ul class="dropdown-menu" role="menu">
+                         <li><a href="#">新浪网</a></li>
+                         <li><a href="#">新华社</a></li>
+                         <li><a href="#">凤凰网</a></li>
+                         <li><a href="#">所有网站</a></li>
+                      </ul>
+                </div> -->
+                   <input type="text" class="form-control" style="height: 45px" id="search_key" name="search_key">
+                    
+                   <span class="input-group-btn">
+                     <a class="btn btn-lg btn-primary" href="#" role="button" 
+                     onclick="do_search()" >搜索新闻</a>
+                   </span>
+               </div>
+                <div style="text-align: left;">
+                  <input type="checkbox" id="filterCheck" name="filterCheck" style="zoom:180%;" onclick="fileterCheck(this)">开启过滤
+                </div>
+                
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.carousel -->
+   
+    <!-- 弹出提示框 -->
+     <div class="reveal-modal-bg" id="hide_window"> 
+          <div class="window" id="center" >
+              <div class="panel panel-success" id="approvalDiv">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><img src="{% static "img/close.png" %}" alt="关闭"  style="height:18px;width: 18px;" onclick="closeWindow()" />&nbsp;审核确认
+
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    是否确认审核当页<font style="color:red;font-size: 15px;font-weight: bold;"><strong>全部内容</strong></font>?
+                    <!-- 表示一个成功的或积极的动作 -->
+                   <button type="button" class="btn btn-default" onclick="closeWindow()">取消</button>
+                   <button type="button" class="btn btn-success" onclick="approvalAll()">确认</button>
+                </div>
+                <hr/>
+                  <div style="padding-left:10px;padding-bottom:10px;text-align: center;">
+                  <h5>审核当页<font style="color: red;">部分内容</font></h5>
+                  
+                    <div class="input-group">
+                      <input type="text" class="form-control"  value="1" style="width:80px;" id="begin"/>
+                      <div style="float: left;width: 30px" id="start">
+                        &nbsp;
+                         -
+                        &nbsp;
+                      </div>
+                      <input type="text" class="form-control" placeholder="结束序号" style="width: 80px;" id="end" />
+                      &nbsp;&nbsp;
+                      <button type="button" class="btn btn-success" onclick="approvalPart()">确认审核当前部分</button>
+                  </div>
+                </div>        
+            </div> 
+            <div class="panel panel-success" id="loading" style="display: none;">
+                <div class="panel-body" >
+                    正在审核中,请稍等.....
+                </div>
+            </div>
+            <div class="panel panel-success" id="searching" style="display: none;">
+                <div class="panel-body" >
+                    正在加载,请稍等.....
+                </div>
+            </div>
+          </div> 
+     </div>
+
+     <div class="approvalDiv" id="approval_div">
+       <div class="panel panel-success"  style="text-align: center;height: 60px;padding: 10px;">        
+         <button type="button" class="btn btn-success" onclick="popCenterWindow()">
+           审核当前内容
+         </button>
+       </div>
+     </div>
+
+
+<div class="container marketing" style="padding-top: 10px; margin-top: 0px">
+    <div id="filter_condition" style="margin-top:-55px; ">
+        <ul class="nav navbar-nav">
+            <li>
+                <div class="btn-group" style="margin-right: 5px;">
+                  <span class="input-group-addon" style="width: 240px;height: 34px;">
+                  新闻网站: 
+                        <input type="checkbox" name="webs" value="xlw" checked="checked"/> 新浪网
+                        <input type="checkbox" name="webs" value="xhs" checked="checked"/> 新华社
+
+                      <!-- <input type="checkbox" name="webs" value="rmw" checked="checked" /> 人民网
+                      <input type="checkbox" name="webs" value="zhw" checked="checked" /> 中华网 -->
+                        <input type="checkbox" name="webs" value="fhw" checked="checked"/> 凤凰网
+                  </span>
+                </div>
+            </li>
+            <li>
+                <div class="btn-group" style="margin-right: 5px; height: 30px;padding-top: 6px">
+                    <input type="checkbox" name="article_db" id="article_db" value="1" checked="checked"> 去重
+                </div>
+            </li>
+            <li>
+                <div class="btn-group" style="margin-right: 5px;">
+                    <select class="selectpicker show-tick form-control" name="label_state" id="label_state">
+                        <option value="0" selected="selected"><a href="#">机器预测</a></option>
+                        {% if request.session.user.role == "0" %}
+                        <option value="1"><a href="#">学生标注</a></option>
+                        <option value="2"><a href="#">已审核</a></option>
+                        {% endif %}
+                        {% if request.session.user.role == "1" %}
+                        <option value="1"><a href="#">我已标注</a></option>
+                        {% endif %}
+                    </select>
+                </div>
+            </li>
+            <li>
+                <div class="btn-group" style="margin-right: 5px;">
+                    <select name="label" id="label" class="selectpicker show-tick form-control">
+                        <option value="1"><a href="#">恐怖新闻</a></option>
+                        <option selected="selected" value="0"><a href="#">非恐怖新闻</a></option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <div class="btn-group" style="margin-right: 5px;">
+                    <div style="text-align:center;padding-top:6px;float: left;width: 13px;">
+                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                    </div>
+                    <div style="float: left;margin-left: 2px;">
+                        <input type="text" onfocus="this.blur();" style="width: 200px" name="reservation"
+                               id="reservation" class="form-control" value=""/>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+
+            </li>
+            <li>
+                <div>
+                    每页：
+                    <div class="btn-group" style="margin-right: 5px;">
+                        <select class="selectpicker show-tick form-control" name="page_size" id="page_size">
+                            <option value="10"><a href="#">10</a></option>
+                            <option value="20"><a href="#">20</a></option>
+                            <option value="30"><a href="#">30</a></option>
+                            <option value="40"><a href="#">40</a></option>
+                            <option selected="selected" value="50"><a href="#">50</a></option>
+                            <option value="100"><a href="#">100</a></option>
+                            <option value="200"><a href="#">200</a></option>
+                            <option value="500"><a href="#">500</a></option>
+                            <option value="1000"><a href="#">1000</a></option>
+                        </select>
+                    </div>
+                    篇 &nbsp;&nbsp;
+
+                </div>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+        <div>
+            标签:
+            {% for tag in tagList2 %}
+            <input type="checkbox" name="tagselect" id="tagselect" value="{{tag.tag}}"/>{{tag.tag }}&nbsp;&nbsp;
+            {% endfor %}
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+
+  
+    <script type="text/javascript">
+        var start = moment().subtract(1, 'years');  //30 days, 1 months.
+        var end = moment();
+        $('#reservation').val(start.format('YYYY-MM-DD') + " - " + end.format('YYYY-MM-DD'));
+        $(document).ready(function () {
+            $('#reservation').daterangepicker(
+                {
+                    format: 'YYYY-MM-DD',
+                    locale: {applyLabel: '确定', cancelLabel: '取消', fromLabel: '起始时间', toLabel: '结束时间'},
+                    opens: 'left',
+                    startDate: start,
+                    endDate: end,
+                    showDropdowns: true
+                }
+                , function (start, end, label) {
+                    console.log(start.toISOString(), end.toISOString(), label);
+                });
+        });
+    </script>
+
+
+    <div ng-app="myApp" style="padding-top: 20px;">
+        <ul class="media-list" id="showlist">
+        </ul>
+    </div>
+</div>
+
+<div>
+    <nav style="text-align: center;">
+        <input type="hidden" id="tags" value="{{tagList}}">
+        <input type="hidden" id="search_type" value="simple_search">
+        <input type="hidden" id="isApproval" value="0">
+        <input type="hidden" id="realNum" value="0">
+        <input type="hidden" id="user_role" value="{{request.session.user.role}}">
+        <ul class="pagination" style="height: 80px">
+            <input type="hidden" id="current_page_hidden" value="{{current_page}}">
+            <li id="preli"><a onclick="pre()" href="javascript:;">浏览上一页</a></li>
+            <li class="disabled" id="current_page_num"><a>当前第{{current_page|add:1}} 页</a></li>
+            <li id="nextli"><a onclick="next()" href="javascript:;">浏览下一页</a></li>
+            <li id="approval_li"><a class="btn btn-default" onclick="popCenterWindow()" href="javascript:;"
+                                    role="button">审核通过并进入下一页</a></li>
+
+        </ul>
+    </nav>
+</div>
+      
+      {% include 'foot.html' %}
+      
+      <script type="text/javascript">
+        $("#filter_condition").hide();
+
+        $(document).ready(function(){  
+           left_div_init();
+           var user_role = $("#user_role").val();
+           if(user_role == "1") {
+              $("#preli").hide();
+              $("#nextli").hide();
+           } 
+           search(0, 0, "loading");
+        }); 
+
+      /*$("#label_state").change(function(){
+          var label_state_val = $("#label_state").val();
+          var user_role = $("#user_role").val();
+          if(label_state_val == "1" && user_role == "1"){
+              //
+              $("#approval_div").hide();
+          } else if(label_state_val == '2'){
+              $("#approval_div").hide();
+          } else {
+             $("#approval_div").show();
+          }
+      });*/
+      function left_div_init(){ 
+            //获取窗口的高度 
+          var windowHeight; 
+          windowHeight=$(window).height();  
+          var popHeight=$(".approvalDiv").height(); 
+          var popY=windowHeight-popHeight; 
+          var popX=10; 
+          $("#approval_div").css("top",popY).css("left",popX); 
+      } 
+      </script>
+      </body>
+  </html>

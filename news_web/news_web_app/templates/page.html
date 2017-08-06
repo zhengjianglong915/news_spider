@@ -1,0 +1,73 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://v3.bootcss.com/examples/carousel/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>恐怖新闻分类网站</title>
+    {% include 'head.html' %}
+    <script src="{% static "js/jquery.min.js" %}" ></script>
+    </script>
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+    {% include 'nav.html' %}
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" style="height: 200px">
+      <div class="carousel-inner" role="listbox">
+        <div class="item active" style="height: 200px">
+          <img src="{% static "img/bg.jpg" %}" alt="First slide">    
+        </div>
+      </div>
+    </div><!-- /.carousel -->
+
+
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+    
+    <div class="container marketing" style="padding-top: 10px; margin-top: -60px" >
+         <div class="row featurette" style="padding: 0px 60px">
+            <span style="text-align: center;">
+              <h2>{{article.article_title}}</h2>
+            </span>
+            <div style="text-align: center;">
+            <span>{{article.article_publish_time}}</span>
+            来源:<span class="label label-primary">{{article.article_source}}</span> 
+            {% if article.article_label == 1 %}
+              <span class="label label-success">
+                恐怖新闻
+              </span>
+            {% else %}
+                  <span class="label label-warning">非恐怖新闻</span>
+            {% endif %}
+           </div>
+           <div style="margin-top: 20px;">
+             {% autoescape off %}
+                  {{article.article_content}}
+                {% endautoescape %}
+         </div>
+         <br>
+         <div style="text-align: center;">
+
+         <!-- <a class="btn btn-primary" href="#" role="button">纠正类标</a> -->
+         <a class="btn btn-primary"  target="_blank" href="{{article.article_url}}" role="button">查看原文&raquo;</a>
+         </div>
+        </div>
+      </div>
+
+      
+      <!-- /END THE FEATURETTES -->
+
+
+      <!-- FOOTER -->
+      {% include 'foot.html' %}
+    </body>
+</html>

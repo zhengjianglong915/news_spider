@@ -1,0 +1,91 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://v3.bootcss.com/examples/carousel/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
+
+    <title>恐怖新闻分类网站</title>
+    {% include 'head.html' %}
+    <script src="{% static "js/jquery.min.js" %}" ></script>
+    </script>
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+    {% include 'nav.html' %}
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" style="height: 200px">
+      <div class="carousel-inner" role="listbox">
+        <div class="item active" style="height: 200px">
+          <img src="{% static "img/bg.jpg" %}" alt="First slide">    
+        </div>
+      </div>
+    </div><!-- /.carousel -->
+
+
+    <div class="container marketing" style="margin-top: -10px auto" >
+      <div class="row featurette">
+        <ul class="media-list">
+           <li class="media" style=" margin: 5px 60px;"> 
+            <div class="media-body" style="border-bottom: 1px dashed gray;"> 
+               <a href="/page"><h4>奥巴马告别演说带"乡愁":鼓励支持者对未来乐观</h4></a>
+               <span>2017-01-11</span>
+              来源:<span class="label label-primary">新华网</span> <br/>
+               <span class="label label-success">恐怖主义新闻</span>
+                <p>还有9天，贝拉克·奥巴马将离开白宫，卸任美国总统。当地时间10日晚8时，他在芝加哥发表告别演说。这座城市是他政治生涯开始的地方。“第一次来芝加哥那年，我二十出头，还在思索着‘我是谁’，我的人生目标是什么，”奥巴马的演说摘要写道，“我就住在这儿附近的一个社区，在一家关了门的轧钢厂旁边与教会团体的伙伴们一起干活。”</p>
+
+                 <p>
+                  <a class="btn btn-default" href="#" role="button">纠正类标</a>
+                  <a class="btn btn-default" href="/page" role="button">查看 &raquo;</a>
+
+                 </p>
+              </div>
+          </li>
+          
+
+           <li class="media" style="margin: 5px 60px;"> 
+            <div class="media-body" style="border-bottom: 1px dashed gray;"> 
+               <a href="/page"><h4>新华社首颁创新大奖 为媒体深度融合发展树标杆</h4></a>
+               <span>2017-01-11</span>  来源:<span class="label label-primary">新华网</span> <br/>
+               <span class="label label-warning">其他新闻</span>
+                <p>新华社北京１月１０日新媒体专电（记者高洁　田光雨）１０日，新华社重奖２０１６年创新项目，为媒体深度融合树立创新标杆。
+
+　　在１０日举行的新华社年度工作会议上，新华社社长、党组书记蔡名照为“现场新闻”全息直播态新媒体产品、《红色气质》微电影、“新华社特约记者太空日记”系列报道产品的主创人员颁发“新华社创新奖”</p>
+                 
+                 <p>
+                 <a class="btn btn-default" href="#" role="button">纠正类标</a>
+                 <a class="btn btn-default" href="/page" role="button">查看 &raquo;</a></p>
+                 
+              </div>
+
+          </li>
+           
+        </ul>
+        </div>
+      </div>
+
+      <nav style="text-align: center;">
+        <ul class="pagination" style="height: 80px">
+          <li class="disabled"><a href="#" >&laquo;</a></li>
+          <li class="active"><a href="#" >1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li><a href="#">&raquo;</a></li>
+        </ul>
+      </nav>
+      <!-- /END THE FEATURETTES -->
+
+
+      <!-- FOOTER -->
+      {% include 'foot.html' %}
+      </body>
+  </html>

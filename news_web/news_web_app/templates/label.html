@@ -1,0 +1,187 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://v3.bootcss.com/examples/carousel/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
+
+    <title>恐怖新闻分类网站</title>
+    {% include 'head.html' %}
+    
+
+    <link href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"
+    rel="stylesheet">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+
+    <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+    
+
+    <link rel="stylesheet" type="text/css" media="all" href="{% static "time/daterangepicker-bs3.css" %}" />
+    <script src="{% static "js/jquery.min.js" %}" ></script>
+    </script>
+    <script type="text/javascript" src="{% static "time/moment.js" %}">
+    </script>
+    <script type="text/javascript" src="{% static "time/daterangepicker.js" %}">
+    </script>
+
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+    {% include 'nav.html' %}
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" style="height: 350px">
+      <div class="carousel-inner" role="listbox">
+        <div class="item active" style="height: 350px">
+          <img src="{% static "img/bg.jpg" %}" alt="First slide">
+          <div class="container" style="height: 200px">
+            <div class="carousel-caption" style="height: 200px">
+              <h1>新闻抓取与分类</h1>
+              <div class="input-group">
+                <!-- <div class="input-group-btn" style="height: 45px">
+                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="height: 45px">所有网站 <span class="caret"></span></button>
+                      <ul class="dropdown-menu" role="menu">
+                         <li><a href="#">新浪网</a></li>
+                         <li><a href="#">新华社</a></li>
+                         <li><a href="#">凤凰网</a></li>
+                         <li><a href="#">所有网站</a></li>
+                      </ul>
+                </div> -->
+               <input type="text" class="form-control" placeholder="search" style="height: 45px">
+               <span class="input-group-btn">
+                 <a class="btn btn-lg btn-primary" href="#" role="button">搜索新闻</a>
+               </span>
+               
+               </div>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.carousel -->
+
+
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+     <div style="margin-top:-55px; margin-left: 120px; margin-right: 120px; ">
+        <div class="btn-group" style="margin-right: 5px;">
+             <div class="btn-group" style="margin-right: 5px;">
+                <span class="input-group-addon" style="width: 240px;height: 34px;">
+                新闻网站: 
+                      <input type="checkbox" name="webs" checked="checked" >新浪网
+                      <input type="checkbox" name="webs" checked="checked" >人民网
+                      <input type="checkbox" name="webs" checked="checked" >中华网
+                </span>
+              </div>
+              <div class="btn-group" style="margin-right: 5px;">
+                <select class="selectpicker show-tick form-control" name="database"> 
+                  <option><a href="#">去重库</a></option>
+                  <option selected="selected"><a href="#">原始库</a></option>
+                </select>
+              </div>
+
+              <div class="btn-group" style="margin-right: 5px;">
+                <select class="selectpicker show-tick form-control" name="database"> 
+                  <option><a href="#">机器预测</a></option>
+                  <option><a href="#">学生标注</a></option>
+                  <option selected="selected"><a href="#">已审核</a></option>
+                </select>
+              </div>
+              <div class="btn-group" style="margin-right: 5px;">
+                <select class="selectpicker show-tick form-control" > 
+                  <option selected="selected"><a href="#">恐怖新闻</a></option>
+                  <option><a href="#">其他新闻</a></option>
+                </select>
+              </div>
+             <div class="input-prepend input-group" style="margin-right: 5px;">
+                   <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span><input type="text" readonly style="width: 200px" name="reservation" id="reservation" class="form-control" value="" /> 
+              </div>
+             
+
+               <script type="text/javascript">
+                var start = moment().subtract(30, 'days');
+                var end = moment();
+
+                $('#reservation').val(start.format('YYYY-MM-DD')+ " - " + end.format('YYYY-MM-DD'));
+               $(document).ready(function() {
+                  $('#reservation').daterangepicker(
+                    {format:'YYYY-MM-DD',locale:{applyLabel:'确定',cancelLabel:'取消',fromLabel:'起始时间',toLabel:'结束时间'},
+                     opens:'left',
+                     startDate:start,
+                     endDate:end,
+                     showDropdowns:true
+                   }
+                    , function(start, end, label) {
+                    console.log(start.toISOString(), end.toISOString(), label);
+                  });
+               });
+               </script>
+              
+       </div>
+    </div>
+    <div class="container marketing" style="padding-top: 20px; margin-top: 0px" >
+      <div class="row featurette">
+        <ul class="media-list">
+           <li class="media" style=" margin: 5px 60px;"> 
+            <div class="media-body" style="border-bottom: 1px dashed gray;"> 
+               <a href="/page"><h4>奥巴马告别演说带"乡愁":鼓励支持者对未来乐观</h4></a>
+               <span>2017-01-11</span>
+              来源:<span class="label label-primary">新华网</span> <br/>
+               <span class="label label-success">恐怖主义新闻</span>
+                <p>还有9天，贝拉克·奥巴马将离开白宫，卸任美国总统。当地时间10日晚8时，他在芝加哥发表告别演说。这座城市是他政治生涯开始的地方。“第一次来芝加哥那年，我二十出头，还在思索着‘我是谁’，我的人生目标是什么，”奥巴马的演说摘要写道，“我就住在这儿附近的一个社区，在一家关了门的轧钢厂旁边与教会团体的伙伴们一起干活。”</p>
+
+                 <p>
+                  <a class="btn btn-default" href="#" role="button">纠正类标</a>
+                  <a class="btn btn-default" href="/page" role="button">查看 &raquo;</a>
+
+                 </p>
+              </div>
+          </li>
+          
+
+           <li class="media" style="margin: 5px 60px;"> 
+            <div class="media-body" style="border-bottom: 1px dashed gray;"> 
+               <a href="/page"><h4>新华社首颁创新大奖 为媒体深度融合发展树标杆</h4></a>
+               <span>2017-01-11</span>  来源:<span class="label label-primary">新华网</span> <br/>
+               <span class="label label-warning">其他新闻</span>
+                <p>新华社北京１月１０日新媒体专电（记者高洁　田光雨）１０日，新华社重奖２０１６年创新项目，为媒体深度融合树立创新标杆。
+
+　　在１０日举行的新华社年度工作会议上，新华社社长、党组书记蔡名照为“现场新闻”全息直播态新媒体产品、《红色气质》微电影、“新华社特约记者太空日记”系列报道产品的主创人员颁发“新华社创新奖”</p>
+                 
+                 <p>
+                 <a class="btn btn-default" href="#" role="button">纠正类标</a>
+                 <a class="btn btn-default" href="/page" role="button">查看 &raquo;</a></p>
+                 
+              </div>
+
+          </li>
+           
+        </ul>
+        </div>
+      </div>
+
+      <div>
+        <button style="botton">审核该页</button>
+      </div>
+      <!-- /END THE FEATURETTES -->
+
+
+      <!-- FOOTER -->
+      {% include 'foot.html' %}
+
+   
+      </body>
+  </html>

@@ -1,0 +1,39 @@
+{% for article in articleList %}
+           <li class="media" style=" margin: 5px 60px;"> 
+            <div class="media-body"> 
+               <a href="/page?articleId={{article.id}}"><h4>{{article.article_title }}</h4></a>
+               <span>{{article.article_publish_time}} </span>
+              来源:<span class="label label-primary">新华网</span> &nbsp;&nbsp;分类:
+               
+                {% if article.article_label == 1%}
+                 <span class="label label-success">
+                   恐怖新闻
+                  </span>
+                {% else %}
+                  <span class="label label-warning">非恐怖新闻</span>
+                {% endif %}
+               标签：
+               <br/>
+                <p>
+                {% autoescape off %}
+                  {{article.article_content}}
+                {% endautoescape %}
+                </p>
+               
+
+               
+                </p>
+              </div>
+              <a class="btn btn-default" href="#" role="button">纠正类标</a>
+              &nbsp;&nbsp;
+              <div class="btn-group">
+                <select class="selectpicker show-tick form-control" name="label_state"> 
+                      <option value="0" selected="selected"><a href="#"> - </a></option>
+                      <option value="1"><a href="#">标签1</a></option>
+                      <option value="2" ><a href="#">标签2</a></option>
+                </select>
+              </div>
+              <a class="btn btn-default" href="#" role="button">添加标签</a>
+              <div style="border-bottom: 1px dashed gray; height: 2px;" ></div>
+          </li>
+          {% endfor %}
