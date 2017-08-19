@@ -54,10 +54,6 @@ function popLoadingWindow(){
 
 
 
-
-
-
-
 //==========================================================
 // 首页ajax js
 //===========================================================
@@ -86,7 +82,6 @@ function next(){
 }
 
 function do_search(){
-     popLoadingWindow();
      filter();
 }
 
@@ -131,6 +126,7 @@ function filter(){
     search(0,0, "filter");
 }
 function search(current_page, show_page, op){
+  var search_type = $("#search_type").val();
   if(current_page < 0){
     alert("已经是第1页了");
     return;
@@ -149,10 +145,30 @@ function search(current_page, show_page, op){
        count = count + 1;
     } 
   }
-  if(webs==''){
+  if(webs=='' && search_type == "filter_search"){
     alert("请选择新闻网站。"); 
     return;
+  } else if (webs == '') {
+     webs = 'xlw,xhs,fhw';
   }
+
+  var label_states= get_check_val('label_state'); 
+  if(label_states=='' && search_type == "filter_search"){
+    alert("请选择新闻状态"); 
+    return;
+  } else if (label_states == '') {
+    label_states="0,1,2";
+  }
+
+  var labels= get_check_val('labels'); 
+  if(labels=='' && search_type == "filter_search"){
+    alert("请选择新闻分类"); 
+    return;
+  } else if (labels=='') {
+    labels = '0,1';
+  }
+
+
   var tags = '';
   count = 0;
   var tags_chk = document.getElementsByName('tagselect');
@@ -167,17 +183,23 @@ function search(current_page, show_page, op){
     } 
   }
 
+  var time_range_chk = document.getElementsByName('time_range_chk')
+  var timerange_check = 0;
+  if (time_range_chk[0].checked) {
+     timerange_check = 1;
+  }
+
   var page_size = $("#page_size").val();
   var timerange = $("#reservation").val();
   var search_key = $("#search_key").val();
-  var search_type = $("#search_type").val();
+  
   var label = $("#label").val();
   var label_state = $("#label_state").val();
   var article_db = 0;
   if($('#article_db').is(':checked')){
       article_db = 1;
   }
-
+   popLoadingWindow();
 
   //location.href = "/search?current_page=" + current_page + "&webs=" + webs+"&page_size="+page_size;
   $.ajax({  
@@ -185,8 +207,9 @@ function search(current_page, show_page, op){
     url : "/search",//路径  
     data : {  
        "current_page":current_page, "webs":webs, "page_size":page_size,
-       "timerange":timerange, "article_db":article_db, "label_state":label_state,
-       "label":label, "search_key":search_key,"search_type":search_type,"tags":tags
+       "timerange":timerange, "article_db":article_db, "label_states":label_states,
+       "label":labels, "search_key":search_key,"search_type":search_type,"tags":tags,
+       "timerange_check":timerange_check
     },//数据，这里使用的是Json格式进行传输  
       success : function(result) {//返回数据根据结果进行相应的处理  
          if(result.length < 1 && current_page != 0){
@@ -234,16 +257,12 @@ function search(current_page, show_page, op){
                
             } 
             li_txt = li_txt + '</span>';
-            if(label_state == "1" && result[i].update_student != undefined){
-                li_txt = li_txt +'&nbsp;&nbsp;标注学生:<font style="color:red">' + result[i].update_student +"</font>";
-            }else if(label_state == "2" ){
-                if(result[i].update_student != undefined){
-                  li_txt = li_txt +'&nbsp;&nbsp;标注学生:<font style="color:red">' + result[i].update_student +"</font>";
-                }
-                if(result[i].update_admin != undefined){
-                  li_txt = li_txt + '&nbsp;&nbsp;审核管理员<font style="color:red">:'+  result[i].update_admin +"</font>";
-                }  
+           if(result[i].update_student != undefined){
+              li_txt = li_txt +'&nbsp;&nbsp;标注学生:<font style="color:red">' + result[i].update_student +"</font>";
             }
+            if(result[i].update_admin != undefined){
+              li_txt = li_txt + '&nbsp;&nbsp;审核管理员<font style="color:red">:'+  result[i].update_admin +"</font>";
+            }  
             li_txt = li_txt + "<br/><p>"
             +'<span id="content_span_'+i+'">'
             + result[i].article_content + '</p></p></span></div>'
@@ -274,6 +293,23 @@ function search(current_page, show_page, op){
            var sc=$(window).scrollTop();
       }  
   });  
+}
+
+function get_check_val(elementName) {
+  var check=document.getElementsByName(elementName);
+  var content =''; 
+  var count = 0;
+  for(var i=0; i<check.length; i++){ 
+    if(check[i].checked){
+       if(count == 0){
+          content += check[i].value; //如果选中，将value添加到变量s中
+       }else{
+          content += "," + check[i].value; //如果选中，将value添加到变量s中
+       }
+       count = count + 1;
+    } 
+  }
+  return content;
 }
 function addArticleTag(itemId){
   var tagsId = "#tags_" + itemId;

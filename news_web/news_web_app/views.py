@@ -7,6 +7,7 @@ from es import ES
 from django.http import HttpResponse 
 from django.views.decorators.csrf import csrf_exempt
 import pdb
+import traceback
 
 mongodb_path = os.path.join(os.path.dirname(__file__),os.pardir,os.pardir)
 sys.path.append(mongodb_path)
@@ -152,18 +153,34 @@ def search(request):
         else:
             article_db = 0
 
-        if "label_state" in request.POST:
-            label_state = request.POST['label_state']
-            label_state = int(label_state)
+        if "label_states" in request.POST:
+            label_states = request.POST['label_states']
+            str_label_states = label_states.split(",")
+            label_state = []
+            for i in range(len(str_label_states)):
+                label_state.append(int(str_label_states[i]))
         else:
-            label_state = 0
+            label_state = [0,1,2]
+        print "label_state:", label_state
 
+        if "timerange_check" in request.POST:
+            timerange_check = request.POST["timerange_check"]
+            timerange_check = int(timerange_check)
+        else:
+            timerange_check = 0
+
+        print "timerange_check", timerange_check
 
         if "label" in request.POST:
             label = request.POST['label']
+            str_labels = label.split(",")
+            label = []
+            for i in range(len(str_labels)):
+                label.append(int(str_labels[i]))
         else:
-            label = "1"
+            label = [0, 1]
 
+        print "label", label
         if "search_key" in request.POST:
             search_key = request.POST['search_key'].strip()
         else:
@@ -176,34 +193,61 @@ def search(request):
 
         print "search_key:",search_key
         print "search_type",search_type
+
         #label = labelMap[label]
         
         user = request.session.get('user',default=None)
-        if label_state == 1 and user['role'] == "1":
-            condition = {"article_source":webs, "article_db":article_db, "article_label_state":label_state, "startTime": startTime,
-             "endTime":endTime, "current_page":current_page , "page_size":page_size,"update_student":user["username"],"article_label":label,"tags":tags}
+        if 1 in label_state and user['role'] == "1":
+            condition = {"article_source":webs, 
+            "article_db":article_db, 
+            "article_label_state":label_state,
+             "startTime": startTime,
+             "endTime":endTime, 
+             "current_page":current_page, 
+             "page_size":page_size,
+             "update_student":user["username"],
+             "article_label":label,
+             "tags":tags, 
+             "timerange_check":timerange_check,
+             "search_type": search_type}
         else:
-            condition = {"article_source":webs, "article_db":article_db, "article_label_state":label_state, "startTime": startTime,
-             "endTime":endTime, "current_page":current_page , "page_size":page_size,"article_label":label,"tags":tags}
+            condition = {"article_source":webs, 
+            "article_db":article_db, 
+            "article_label_state":label_state, 
+            "startTime": startTime,
+             "endTime":endTime, 
+             "current_page":current_page , 
+             "page_size":page_size,
+             "article_label":label,
+             "tags":tags, 
+             "timerange_check":timerange_check,
+             "search_type": search_type}
         
+        print "condition:", condition
         logging.info("[search] condition=" + str(condition))
         
         system_setting = SystemSetting()
-        databases = system_setting.get("databases", "mongodb")
-        print "databases:",databases
-        if databases == 'es':
+        # databases = system_setting.get("databases", "mongodb")
+        # print "databases:",databases
+
+        if search_key == None or search_key.strip() == "":
+            print "mongodb "
+            articleDAO = ArticleDAO('articles_testN')
+            articleList = articleDAO.article_search_list(condition)
+        else:
+            print "elastic search "
             es = ES()
             if search_type == "simple_search":
                 articleList = es.article_simple_search(condition, search_key)
             else:
                 articleList = es.article_search_list(condition, search_key)
-        else:
-            articleDAO = ArticleDAO('articles_testN')
-            articleList = articleDAO.article_search_list(condition)
+            
 
         logging.info("[search] len(result)=" + str(len(articleList)))
     except BaseException, e:
         logging.error(e)
+        print e
+        print traceback.print_exc()
         articleList = []
 
     return HttpResponse(json.dumps(articleList), content_type="application/json")  

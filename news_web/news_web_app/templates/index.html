@@ -43,6 +43,30 @@
           height:60px; 
           position:fixed;
        }
+       .select_item_div{
+          border-style:solid; 
+          border-width:1px; 
+          border-color:#DDDDDD; 
+          border-bottom-width: 0px; 
+          height: 35px;
+       }
+       .select_item_last_div{
+         border-style:solid; 
+         border-width:1px; 
+         border-color:#DDDDDD; 
+         height: 35px;
+       }
+       .left_item_div {
+          float: left; width: 100px; height: 35px;background-color: #DDDDDD;
+          border-style:solid; border-color:#AAAAAA; border-width: 0px;
+          border-right-width: 1px;
+          border-bottom-width: 1px;
+          padding: 5px;
+          padding-left: 10px;
+       }
+       .right_item_dev{
+            float: left;height: 35px; padding: 5px;
+       }
        a:hover{
         cursor: pointer;
        }  
@@ -88,13 +112,14 @@
 
     <!-- Carousel
     ================================================== -->
-    <div id="myCarousel" class="carousel slide" data-ride="carousel" style="height: 350px">
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" style="height: 190px">
       <div class="carousel-inner">
-        <div style="height: 350px">
+        <div style="height: 190px">
           <img src="{% static "img/bg.jpg" %}" alt="First slide">
-          <div class="container" style="height: 200px">
-            <div class="carousel-caption" style="height: 200px">
-              <h1>新闻抓取与分类</h1>
+          <div class="container" style="height: 140px">
+            <div class="carousel-caption" style="height: 140px;">
+              <br>
+              <h2>新闻抓取与分类</h2>
               <div class="input-group">
                 <!-- <div class="input-group-btn" style="height: 45px">
                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="height: 45px">所有网站 <span class="caret"></span></button>
@@ -109,7 +134,7 @@
                     
                    <span class="input-group-btn">
                      <a class="btn btn-lg btn-primary" href="#" role="button" 
-                     onclick="do_search()" >搜索新闻</a>
+                     onclick="simple_search()" >搜索新闻</a>
                    </span>
                </div>  
             </div>
@@ -178,81 +203,130 @@
 
 
 <div class="container marketing" style="padding-top: 10px; margin-top: 0px">
-    <div id="filter_condition" style="margin-top:-55px; ">
-        <div class="btn-group" style="margin-right: 5px;">
-          <span class="input-group-addon" style="width: 240px;height: 34px;">
-          新闻网站: 
-                <input type="checkbox" name="webs" value="xlw" checked="checked"/> 新浪网
-                <input type="checkbox" name="webs" value="xhs" checked="checked"/> 新华社
-
-              <!-- <input type="checkbox" name="webs" value="rmw" checked="checked" /> 人民网
-              <input type="checkbox" name="webs" value="zhw" checked="checked" /> 中华网 -->
-                <input type="checkbox" name="webs" value="fhw" checked="checked"/> 凤凰网
-          </span>
-        </div>
-        <div class="btn-group" style="margin-right: 5px; height: 30px;padding-top: 6px">
-            <input type="checkbox" name="article_db" id="article_db" value="1" checked="checked"> 去重
-        </div>
-
-        <div class="btn-group" style="margin-right: 5px;">
-            <select class="selectpicker show-tick form-control" name="label_state" id="label_state">
-                <option value="0" selected="selected"><a href="#">机器预测</a></option>
-                {% if request.session.user.role == "0" %}
-                <option value="1"><a href="#">学生标注</a></option>
-                <option value="2"><a href="#">已审核</a></option>
-                {% endif %}
-                {% if request.session.user.role == "1" %}
-                <option value="1"><a href="#">我已标注</a></option>
-                {% endif %}
-            </select>
-        </div>
-
-        <div class="btn-group" style="margin-right: 5px;">
-            <select name="label" id="label" class="selectpicker show-tick form-control">
-                <option value="1"><a href="#">恐怖新闻</a></option>
-                <option selected="selected" value="0"><a href="#">非恐怖新闻</a></option>
-            </select>
-        </div>
-
-        <div class="btn-group" style="margin-right: 5px;">
-            <div style="text-align:center;padding-top:6px;float: left;width: 13px;">
-                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-            </div>
-            <div style="float: left;margin-left: 2px;">
-                <input type="text" onfocus="this.blur();" style="width: 200px" name="reservation"
-                       id="reservation" class="form-control" value=""/>
-            </div>
-            <div style="clear: both;"></div>
-        </div>
-
-        <div>
-          每页：
-          <div class="btn-group" style="margin-right: 5px;">
-              <select class="selectpicker show-tick form-control" name="page_size" id="page_size">
-                  <option value="10"><a href="#">10</a></option>
-                  <option value="20"><a href="#">20</a></option>
-                  <option value="30"><a href="#">30</a></option>
-                  <option value="40"><a href="#">40</a></option>
-                  <option selected="selected" value="50"><a href="#">50</a></option>
-                  <option value="100"><a href="#">100</a></option>
-                  <option value="200"><a href="#">200</a></option>
-                  <option value="500"><a href="#">500</a></option>
-                  <option value="1000"><a href="#">1000</a></option>
-              </select>
+    <div style="margin-top:-55px; ">
+        <div class="select_item_div">
+          <div class="left_item_div">
+            新闻来源: 
           </div>
-          篇 &nbsp;&nbsp;
-      </div>
-        <div style="clear: both;"></div>
-        <div>
-            标签:
-            {% for tag in tagList2 %}
-            <input type="checkbox" name="tagselect" id="tagselect" value="{{tag.tag}}"/>{{tag.tag }}&nbsp;&nbsp;
-            {% endfor %}
+
+          <div class="right_item_dev">
+            <span class="btn-group">
+                  <input type="checkbox" name="webs" value="xlw" checked="checked"/> 新浪网
+                  <input type="checkbox" name="webs" value="xhs" checked="checked"/> 新华社
+                <!-- <input type="checkbox" name="webs" value="rmw" checked="checked" /> 人民网
+                <input type="checkbox" name="webs" value="zhw" checked="checked" /> 中华网 -->
+                  <input type="checkbox" name="webs" value="fhw" checked="checked"/> 凤凰网
+            </span>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+      
+
+        <div class="select_item_div">
+          <div class="left_item_div">
+            数据去重:
+          </div>
+           <div class="right_item_dev">
+                <input type="checkbox" name="article_db" id="article_db" value="1" checked="checked"> 去重
+           </div>
+           <div style="clear: both;"></div>
+        </div>
+
+
+        <div class="select_item_div">
+          <div class="left_item_div">
+              新闻状态：
+          </div>
+          <div class="right_item_dev">
+            <span class="btn-group">
+                  <input type="checkbox" name="label_state" checked="checked" value="0" /> 机器预测
+                  {% if request.session.user.role == "0" %}
+                      <input type="checkbox" name="label_state" checked="checked" value="1" /> 学生标注
+                      <input type="checkbox" name="label_state" checked="checked" value="2" /> 已审核
+                  {% endif %}
+                  {% if request.session.user.role == "1" %}
+                      <input type="checkbox" name="label_state" checked="checked" value="1" /> 我已标注
+                  {% endif %}
+            </span>
+          </div>
+          <div style="clear: both;"></div>
+        </div>
+
+
+        <div class="select_item_div">
+          <div class="left_item_div">
+            新闻分类：
+          </div>
+          <div class="right_item_dev">
+             <span class="btn-group">
+                <input type="checkbox" name="labels" value="1" checked="checked"/> 恐怖新闻
+                <input type="checkbox" name="labels" value="0" checked="checked"/> 非恐怖新闻
+              </span>
+            </div>
             <div style="clear: both;"></div>
         </div>
-        <button style="botton" onclick="filter()" class="btn btn-success">筛选</button>
-    </div>
 
+        <div class="select_item_div">
+           <div class="left_item_div">
+            新闻标签:
+          </div>
+          <div class="right_item_dev">
+            {% for tag in tagList2 %}
+               <input type="checkbox" name="tagselect" id="tagselect" value="{{tag.tag}}"/>{{tag.tag }}&nbsp;&nbsp;
+            {% endfor %}
+           </div>
+            <div style="clear: both;"></div>
+        </div>
+
+        <div class="select_item_div" style="height: 45px;">
+          <div class="left_item_div" style="height: 45px;">
+              时间范围：
+          </div>
+           <div class="right_item_dev" style="height: 45px;">
+              <div style="float: left; padding: 5px;">
+                使用 <input type="checkbox" name="time_range_chk" id="time_range_chk" value="1" >
+              </div>
+              <div style="float: left; margin-left: 5px;">
+                  <input type="text" onfocus="this.blur();" style="width: 200px" name="reservation" id="reservation" class="form-control" value=""/>
+             </div>
+           </div>
+            <div style="clear: both;"></div>
+        </div>
+
+        <div style="clear: both;"></div> 
+        <div style="clear: both;"></div> 
+
+        <div class="select_item_last_div" style="height: 45px;">
+            <div class="left_item_div" style="height: 45px;">
+              每页条目：
+            </div>
+            <div class="right_item_dev" style="height: 45px;">
+                <span class="btn-group">
+                   <select class="selectpicker show-tick form-control" name="page_size" id="page_size">
+                      <option value="10"><a href="#">10</a></option>
+                      <option value="20"><a href="#">20</a></option>
+                      <option value="30"><a href="#">30</a></option>
+                      <option value="40"><a href="#">40</a></option>
+                      <option selected="selected" value="50"><a href="#">50</a></option>
+                      <option value="100"><a href="#">100</a></option>
+                      <option value="200"><a href="#">200</a></option>
+                      <option value="500"><a href="#">500</a></option>
+                      <option value="1000"><a href="#">1000</a></option>
+                  </select>
+               </span>
+            </div>
+            <div style="float: right; padding-top: 5px; padding-right: 5px;">
+              <button  type="botton" style="width: 100px;" onclick="filter_search()" class="btn btn-success">筛选</button>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+
+      
+        <div style="clear: both;"></div>
+        
+
+    </div>
+    <div style="clear: both;"></div> 
   
     <script type="text/javascript">
         var start = moment().subtract(1, 'years');  //30 days, 1 months.
@@ -263,7 +337,7 @@
                 {
                     format: 'YYYY-MM-DD',
                     locale: {applyLabel: '确定', cancelLabel: '取消', fromLabel: '起始时间', toLabel: '结束时间'},
-                    opens: 'left',
+                    opens: 'right',
                     startDate: start,
                     endDate: end,
                     showDropdowns: true
@@ -293,8 +367,7 @@
             <li id="preli"><a onclick="pre()" href="javascript:;">浏览上一页</a></li>
             <li class="disabled" id="current_page_num"><a>当前第{{current_page|add:1}} 页</a></li>
             <li id="nextli"><a onclick="next()" href="javascript:;">浏览下一页</a></li>
-            <li id="approval_li"><a class="btn btn-default" onclick="popCenterWindow()" href="javascript:;"
-                                    role="button">审核通过并进入下一页</a></li>
+            <li id="approval_li"><a class="btn btn-default" onclick="popCenterWindow()" href="javascript:;" role="button">审核通过并进入下一页</a></li>
 
         </ul>
     </nav>
